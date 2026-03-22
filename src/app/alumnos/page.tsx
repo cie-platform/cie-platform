@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseClient } from "@/lib/supabase";
 
 type Alumno = {
     id: string
@@ -70,6 +70,8 @@ const initialForm: AlumnoForm = {
 }
 
 export default function AlumnosPage() {
+    const supabase = getSupabaseClient();
+
     const [form, setForm] = useState<AlumnoForm>(initialForm)
     const [items, setItems] = useState<Alumno[]>([])
     const [editingId, setEditingId] = useState<string | null>(null)
@@ -507,8 +509,8 @@ export default function AlumnosPage() {
 
     function fieldBaseClass(hasError?: boolean) {
         return `w-full rounded-2xl border px-4 py-3 text-sm text-white outline-none transition-all duration-300 ${hasError
-                ? 'border-red-400/40 bg-red-500/5 focus:border-red-400 focus:shadow-[0_0_20px_rgba(248,113,113,0.35)]'
-                : 'border-white/10 bg-white/10 focus:border-cyan-400/50 focus:bg-white/[0.14] focus:shadow-[0_0_25px_rgba(34,211,238,0.35)]'
+            ? 'border-red-400/40 bg-red-500/5 focus:border-red-400 focus:shadow-[0_0_20px_rgba(248,113,113,0.35)]'
+            : 'border-white/10 bg-white/10 focus:border-cyan-400/50 focus:bg-white/[0.14] focus:shadow-[0_0_25px_rgba(34,211,238,0.35)]'
             } placeholder:text-slate-400`
     }
 
@@ -544,8 +546,8 @@ export default function AlumnosPage() {
                 {message && (
                     <div
                         className={`rounded-2xl px-4 py-3 text-sm ${messageType === 'success'
-                                ? 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-200'
-                                : 'border border-red-400/20 bg-red-400/10 text-red-200'
+                            ? 'border border-emerald-400/20 bg-emerald-400/10 text-emerald-200'
+                            : 'border border-red-400/20 bg-red-400/10 text-red-200'
                             }`}
                     >
                         {message}
@@ -730,14 +732,14 @@ export default function AlumnosPage() {
 
             <div
                 className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-500 ${formPanelOpen
-                        ? 'pointer-events-auto opacity-100 backdrop-blur-xl bg-slate-950/70'
-                        : 'pointer-events-none opacity-0 backdrop-blur-0'
+                    ? 'pointer-events-auto opacity-100 backdrop-blur-xl bg-slate-950/70'
+                    : 'pointer-events-none opacity-0 backdrop-blur-0'
                     }`}
             >
                 <div
                     className={`relative flex h-[88vh] w-full max-w-4xl transform flex-col overflow-hidden rounded-[40px] border border-cyan-300/30 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.22),transparent_18%),radial-gradient(circle_at_top_right,rgba(139,92,246,0.22),transparent_22%),linear-gradient(180deg,rgba(6,10,24,0.99),rgba(10,18,38,0.98))] shadow-[0_0_140px_rgba(34,211,238,0.22),0_40px_120px_rgba(0,0,0,0.65)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${formPanelOpen
-                            ? 'translate-y-0 scale-100 rotate-0 opacity-100'
-                            : 'translate-y-16 scale-95 rotate-[0.6deg] opacity-0'
+                        ? 'translate-y-0 scale-100 rotate-0 opacity-100'
+                        : 'translate-y-16 scale-95 rotate-[0.6deg] opacity-0'
                         }`}
                 >
                     <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(34,211,238,0.03),transparent_30%,rgba(139,92,246,0.04))]" />
@@ -817,8 +819,8 @@ export default function AlumnosPage() {
                                                 value={form.sexo}
                                                 onChange={handleChange}
                                                 className={`w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${errors.sexo
-                                                        ? 'border-red-400/40 bg-red-500/5 text-red-200'
-                                                        : 'border-cyan-400/30 bg-slate-900/90 text-cyan-200'
+                                                    ? 'border-red-400/40 bg-red-500/5 text-red-200'
+                                                    : 'border-cyan-400/30 bg-slate-900/90 text-cyan-200'
                                                     }`}
                                             >
                                                 <option value="" className="bg-slate-900 text-white">
@@ -852,8 +854,8 @@ export default function AlumnosPage() {
                                                 value={form.modulo_actual}
                                                 onChange={handleChange}
                                                 className={`w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${errors.modulo_actual
-                                                        ? 'border-red-400/40 bg-red-500/5 text-red-200'
-                                                        : 'border-amber-400/30 bg-slate-900/90 text-amber-200'
+                                                    ? 'border-red-400/40 bg-red-500/5 text-red-200'
+                                                    : 'border-amber-400/30 bg-slate-900/90 text-amber-200'
                                                     }`}
                                             >
                                                 <option value="Modulo 1 - Basico" className="bg-slate-900 text-amber-200">
@@ -894,8 +896,8 @@ export default function AlumnosPage() {
                                                 value={form.estado}
                                                 onChange={handleChange}
                                                 className={`w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${errors.estado
-                                                        ? 'border-red-400/40 bg-red-500/5 text-red-200'
-                                                        : 'border-violet-400/30 bg-slate-900/90 text-violet-200'
+                                                    ? 'border-red-400/40 bg-red-500/5 text-red-200'
+                                                    : 'border-violet-400/30 bg-slate-900/90 text-violet-200'
                                                     }`}
                                             >
                                                 <option value="activo" className="bg-slate-900 text-violet-200">
@@ -922,8 +924,8 @@ export default function AlumnosPage() {
                                                 placeholder="Observaciones obligatorias"
                                                 autoComplete="new-password"
                                                 className={`min-h-[110px] w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${errors.observaciones
-                                                        ? 'border-red-400/40 bg-red-500/5 text-red-200'
-                                                        : 'border-white/10 bg-white/10 text-white focus:border-cyan-400/40'
+                                                    ? 'border-red-400/40 bg-red-500/5 text-red-200'
+                                                    : 'border-white/10 bg-white/10 text-white focus:border-cyan-400/40'
                                                     } placeholder:text-slate-400`}
                                             />
                                             {helperError(errors.observaciones)}
@@ -1083,8 +1085,8 @@ export default function AlumnosPage() {
             >
                 <div
                     className={`relative flex h-[88vh] w-full max-w-4xl transform flex-col overflow-hidden rounded-[34px] border border-violet-400/20 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.08),transparent_22%),radial-gradient(circle_at_top_right,rgba(139,92,246,0.12),transparent_28%),linear-gradient(180deg,rgba(8,14,32,0.98),rgba(18,23,45,0.98))] shadow-[0_0_80px_rgba(139,92,246,0.10)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${viewPanelOpen
-                            ? 'translate-y-0 scale-100 opacity-100'
-                            : 'translate-y-12 scale-95 opacity-0'
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-12 scale-95 opacity-0'
                         }`}
                 >
                     <div className="border-b border-white/10 bg-white/[0.03] px-6 py-5">
@@ -1228,8 +1230,8 @@ function InputPro({
     return (
         <div
             className={`flex items-center gap-3 rounded-2xl border px-4 py-3 transition-all duration-300 ${error
-                    ? 'border-red-400/40 bg-red-500/5'
-                    : 'border-white/10 bg-white/10 hover:bg-white/[0.08] focus-within:border-cyan-400/40 focus-within:bg-white/[0.12] focus-within:shadow-[0_0_25px_rgba(34,211,238,0.25)]'
+                ? 'border-red-400/40 bg-red-500/5'
+                : 'border-white/10 bg-white/10 hover:bg-white/[0.08] focus-within:border-cyan-400/40 focus-within:bg-white/[0.12] focus-within:shadow-[0_0_25px_rgba(34,211,238,0.25)]'
                 }`}
         >
             <div className="text-cyan-300">{icon}</div>

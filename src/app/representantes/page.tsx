@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseClient } from "@/lib/supabase";
 
 type Representante = {
     id: string
@@ -26,6 +26,8 @@ const initialForm = {
 }
 
 export default function RepresentantesPage() {
+    const supabase = getSupabaseClient();
+
     const [form, setForm] = useState(initialForm)
     const [items, setItems] = useState<Representante[]>([])
     const [editingId, setEditingId] = useState<string | null>(null)
