@@ -1,42 +1,67 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSupabaseClient } from "@/lib/supabase";
 import { useRouter, usePathname } from "next/navigation";
+import { getSupabaseClient } from "@/lib/supabase";
 
-export default function AppShell({ children }: { children: React.ReactNode }) {
-    const supabase = getSupabaseClient();
+export default function AppShell({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const router = useRouter();
     const pathname = usePathname();
+    const supabase = getSupabaseClient();
 
-    const [loading, setLoading] = useState(true);
+    const [loadingSession, setLoadingSession] = useState(true);
 
     useEffect(() => {
-        const checkSession = async () => {
-            const { data } = await supabase.auth.getSession();
+        async function checkSession() {
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
 
-            // 🚫 Si NO está logueado y NO está en /login
-            if (!data.session && pathname !== "/login") {
+            if (!session && pathname !== "/login") {
                 router.push("/login");
+                setLoadingSession(false);
+                return;
             }
 
-            // ✅ Si está logueado y está en login → lo sacamos
-            if (data.session && pathname === "/login") {
+            if (session && pathname === "/login") {
                 router.push("/");
             }
 
-            setLoading(false);
-        };
+            setLoadingSession(false);
+        }
 
         checkSession();
-    }, [pathname]);
 
-    if (loading) {
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session) {
+                if (pathname !== "/login") router.push("/login");
+            } else {
+                if (pathname === "/login") router.push("/");
+            }
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, [pathname, router, supabase]);
+
+    if (loadingSession) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#030712] text-white">
-                <p className="text-sm text-slate-400 animate-pulse">
-                    Cargando sistema...
-                </p>
+            <div className="flex min-h-screen items-center justify-center bg-[#020617] text-white">
+                <div className="text-center">
+                    <p className="text-sm uppercase tracking-[0.25em] text-cyan-300/70">
+                        CIE
+                    </p>
+                    <h2 className="mt-3 text-2xl font-bold text-white">
+                        Cargando sistema...
+                    </h2>
+                </div>
             </div>
         );
     }
