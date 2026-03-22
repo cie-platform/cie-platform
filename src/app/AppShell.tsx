@@ -11,11 +11,12 @@ export default function AppShell({
 }) {
     const router = useRouter();
     const pathname = usePathname();
-    const supabase = getSupabaseClient();
 
     const [loadingSession, setLoadingSession] = useState(true);
 
     useEffect(() => {
+        const supabase = getSupabaseClient();
+
         async function checkSession() {
             const {
                 data: { session },
@@ -49,7 +50,7 @@ export default function AppShell({
         return () => {
             subscription.unsubscribe();
         };
-    }, [pathname, router, supabase]);
+    }, [pathname, router]);
 
     if (loadingSession) {
         return (

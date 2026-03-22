@@ -70,7 +70,6 @@ const initialForm: AlumnoForm = {
 }
 
 export default function AlumnosPage() {
-    const supabase = getSupabaseClient();
 
     const [form, setForm] = useState<AlumnoForm>(initialForm)
     const [items, setItems] = useState<Alumno[]>([])
@@ -90,23 +89,25 @@ export default function AlumnosPage() {
     const [viewPanelOpen, setViewPanelOpen] = useState(false)
 
     async function loadAlumnos() {
+        const supabase = getSupabaseClient();
+
         const { data, error } = await supabase
             .from('alumnos')
             .select(`
-        *,
-        representantes(
-          nombres,
-          apellidos,
-          cedula,
-          telefono,
-          direccion,
-          correo,
-          parentesco
-        )
-      `)
-            .order('created_at', { ascending: false })
+            *,
+            representantes(
+                nombres,
+                apellidos,
+                cedula,
+                telefono,
+                direccion,
+                correo,
+                parentesco
+            )
+        `)
+            .order('created_at', { ascending: false });
 
-        if (!error) setItems((data as Alumno[]) || [])
+        if (!error) setItems((data as Alumno[]) || []);
     }
 
     async function loadAll() {
@@ -315,19 +316,21 @@ export default function AlumnosPage() {
     }
 
     async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        clearGeneralMessage()
+        e.preventDefault();
+        clearGeneralMessage();
 
-        const validationErrors = validateForm(form)
-        setErrors(validationErrors)
+        const validationErrors = validateForm(form);
+        setErrors(validationErrors);
 
         if (Object.keys(validationErrors).length > 0) {
-            setMessage('Revisa los campos obligatorios antes de guardar.')
-            setMessageType('error')
-            return
+            setMessage('Revisa los campos obligatorios antes de guardar.');
+            setMessageType('error');
+            return;
         }
 
-        setLoading(true)
+        setLoading(true);
+
+        const supabase = getSupabaseClient();
 
         const representantePayload = {
             nombres: form.rep_nombres.trim(),
@@ -337,37 +340,37 @@ export default function AlumnosPage() {
             direccion: form.rep_direccion.trim(),
             correo: form.rep_correo.trim().toLowerCase(),
             parentesco: form.rep_parentesco.trim(),
-        }
+        };
 
-        let representanteId = form.representante_id
+        let representanteId = form.representante_id;
 
         if (editingId && form.representante_id) {
             const { error: repUpdateError } = await supabase
                 .from('representantes')
                 .update(representantePayload)
-                .eq('id', form.representante_id)
+                .eq('id', form.representante_id);
 
             if (repUpdateError) {
-                setMessage(repUpdateError.message || 'Error actualizando representante.')
-                setMessageType('error')
-                setLoading(false)
-                return
+                setMessage(repUpdateError.message || 'Error actualizando representante.');
+                setMessageType('error');
+                setLoading(false);
+                return;
             }
         } else {
             const { data: repData, error: repInsertError } = await supabase
                 .from('representantes')
                 .insert([representantePayload])
                 .select('id')
-                .single()
+                .single();
 
             if (repInsertError || !repData) {
-                setMessage(repInsertError?.message || 'Error guardando representante.')
-                setMessageType('error')
-                setLoading(false)
-                return
+                setMessage(repInsertError?.message || 'Error guardando representante.');
+                setMessageType('error');
+                setLoading(false);
+                return;
             }
 
-            representanteId = repData.id
+            representanteId = repData.id;
         }
 
         const alumnoPayload = {
@@ -381,40 +384,40 @@ export default function AlumnosPage() {
             modulo_actual: form.modulo_actual,
             inscripcion_pagada: form.inscripcion_pagada,
             representante_id: representanteId,
-        }
+        };
 
         if (editingId) {
             const { error } = await supabase
                 .from('alumnos')
                 .update(alumnoPayload)
-                .eq('id', editingId)
+                .eq('id', editingId);
 
             if (!error) {
-                setMessage('Alumno actualizado correctamente.')
-                setMessageType('success')
-                setFormPanelOpen(false)
-                resetForm()
-                await loadAlumnos()
+                setMessage('Alumno actualizado correctamente.');
+                setMessageType('success');
+                setFormPanelOpen(false);
+                resetForm();
+                await loadAlumnos();
             } else {
-                setMessage(error.message || 'Error actualizando alumno.')
-                setMessageType('error')
+                setMessage(error.message || 'Error actualizando alumno.');
+                setMessageType('error');
             }
         } else {
-            const { error } = await supabase.from('alumnos').insert([alumnoPayload])
+            const { error } = await supabase.from('alumnos').insert([alumnoPayload]);
 
             if (!error) {
-                setMessage('Alumno guardado correctamente.')
-                setMessageType('success')
-                setFormPanelOpen(false)
-                resetForm()
-                await loadAlumnos()
+                setMessage('Alumno guardado correctamente.');
+                setMessageType('success');
+                setFormPanelOpen(false);
+                resetForm();
+                await loadAlumnos();
             } else {
-                setMessage(error.message || 'Error guardando alumno.')
-                setMessageType('error')
+                setMessage(error.message || 'Error guardando alumno.');
+                setMessageType('error');
             }
         }
 
-        setLoading(false)
+        setLoading(false);
     }
 
     function handleEdit(item: Alumno) {
@@ -446,20 +449,22 @@ export default function AlumnosPage() {
     }
 
     async function handleDelete(id: string) {
-        const ok = window.confirm('¿Eliminar alumno?')
-        if (!ok) return
+        const ok = window.confirm('¿Eliminar alumno?');
+        if (!ok) return;
 
-        clearGeneralMessage()
+        clearGeneralMessage();
 
-        const { error } = await supabase.from('alumnos').delete().eq('id', id)
+        const supabase = getSupabaseClient();
+
+        const { error } = await supabase.from('alumnos').delete().eq('id', id);
 
         if (!error) {
-            setMessage('Alumno eliminado correctamente.')
-            setMessageType('success')
-            await loadAlumnos()
+            setMessage('Alumno eliminado correctamente.');
+            setMessageType('success');
+            await loadAlumnos();
         } else {
-            setMessage(error.message || 'Error eliminando alumno.')
-            setMessageType('error')
+            setMessage(error.message || 'Error eliminando alumno.');
+            setMessageType('error');
         }
     }
 

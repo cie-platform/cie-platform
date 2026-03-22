@@ -26,8 +26,6 @@ const initialForm = {
 }
 
 export default function RepresentantesPage() {
-    const supabase = getSupabaseClient();
-
     const [form, setForm] = useState(initialForm)
     const [items, setItems] = useState<Representante[]>([])
     const [editingId, setEditingId] = useState<string | null>(null)
@@ -36,6 +34,8 @@ export default function RepresentantesPage() {
     const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
 
     async function loadRepresentantes() {
+        const supabase = getSupabaseClient();
+
         setMessage('')
         setMessageType('')
 
@@ -78,6 +78,8 @@ export default function RepresentantesPage() {
         setLoading(true)
         setMessage('')
         setMessageType('')
+
+        const supabase = getSupabaseClient();
 
         const payload = {
             nombres: form.nombres.trim(),
@@ -172,6 +174,8 @@ export default function RepresentantesPage() {
 
         setMessage('')
         setMessageType('')
+
+        const supabase = getSupabaseClient();
 
         const { error } = await supabase
             .from('representantes')
