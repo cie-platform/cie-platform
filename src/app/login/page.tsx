@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { getSupabaseClient } from "@/lib/supabase";
 
 export default function LoginPage() {
     const router = useRouter();
+    const supabase = getSupabaseClient();
 
     const [correo, setCorreo] = useState("");
     const [contrasena, setContrasena] = useState("");
@@ -35,7 +36,6 @@ export default function LoginPage() {
 
     return (
         <main className="relative min-h-screen overflow-hidden bg-[#030712] text-white">
-            {/* Fondo con profundidad */}
             <div className="absolute inset-0">
                 <div className="absolute left-[-8%] top-[-10%] h-[440px] w-[440px] rounded-full bg-cyan-500/20 blur-[130px]" />
                 <div className="absolute right-[-10%] top-[0%] h-[460px] w-[460px] rounded-full bg-violet-500/20 blur-[140px]" />
@@ -46,18 +46,12 @@ export default function LoginPage() {
 
             <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-10">
                 <div className="relative w-full max-w-5xl animate-[fadeInUp_0.8s_ease-out]">
-                    {/* Glow exterior */}
                     <div className="absolute -inset-2 rounded-[40px] bg-gradient-to-r from-cyan-500/20 via-blue-500/10 to-violet-500/20 blur-3xl" />
 
-                    {/* Tarjeta principal */}
                     <div className="relative grid overflow-hidden rounded-[36px] border border-white/10 bg-white/[0.05] shadow-[0_30px_120px_rgba(0,0,0,0.6)] backdrop-blur-2xl lg:grid-cols-2">
-                        {/* brillo superior */}
                         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
-
-                        {/* brillo interior */}
                         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),transparent_20%,transparent_80%,rgba(255,255,255,0.03))]" />
 
-                        {/* Panel visual */}
                         <section className="relative hidden min-h-[650px] overflow-hidden lg:block">
                             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,10,28,0.92),rgba(10,14,35,0.88))]" />
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_35%)]" />
@@ -98,7 +92,6 @@ export default function LoginPage() {
                             </div>
                         </section>
 
-                        {/* Panel login */}
                         <section className="flex min-h-[650px] items-center justify-center p-6 sm:p-10">
                             <div className="w-full max-w-md">
                                 <div className="mb-8 text-center">
