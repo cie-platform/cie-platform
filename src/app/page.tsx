@@ -14,6 +14,8 @@ import {
   ShieldCheck,
   Cpu,
   Sparkles,
+  UserSquare2,
+  LayoutDashboard,
 } from 'lucide-react'
 
 const stats = [
@@ -25,6 +27,7 @@ const stats = [
     iconColor: 'text-cyan-300',
     trend: '+12%',
     detail: 'este mes',
+    href: '/alumnos',
   },
   {
     label: 'Cursos Activos',
@@ -34,15 +37,17 @@ const stats = [
     iconColor: 'text-violet-300',
     trend: '+2',
     detail: 'nuevos cursos',
+    href: '/cursos',
   },
   {
-    label: 'Graduados',
-    value: '7,890',
-    icon: GraduationCap,
+    label: 'Representantes',
+    value: '860',
+    icon: UserSquare2,
     accent: 'from-emerald-400/20 to-teal-500/20',
     iconColor: 'text-emerald-300',
-    trend: '+18%',
-    detail: 'avance anual',
+    trend: '+6%',
+    detail: 'registros activos',
+    href: '/representantes',
   },
   {
     label: 'Ingresos',
@@ -52,6 +57,7 @@ const stats = [
     iconColor: 'text-amber-300',
     trend: '+8%',
     detail: 'vs mes anterior',
+    href: '/cursos',
   },
 ]
 
@@ -63,6 +69,30 @@ const activity = [
 ]
 
 const monthlyData = [42, 58, 67, 49, 84, 91, 76]
+
+const quickLinks = [
+  {
+    title: 'Gestión de alumnos',
+    text: 'Administra registros, edita información y revisa detalles completos.',
+    href: '/alumnos',
+    icon: Users,
+    color: 'text-cyan-300',
+  },
+  {
+    title: 'Representantes',
+    text: 'Consulta, agrega y actualiza representantes del sistema.',
+    href: '/representantes',
+    icon: UserSquare2,
+    color: 'text-emerald-300',
+  },
+  {
+    title: 'Cursos',
+    text: 'Organiza la oferta académica y estructura los módulos activos.',
+    href: '/cursos',
+    icon: BookOpen,
+    color: 'text-violet-300',
+  },
+]
 
 export default function DashboardPage() {
   return (
@@ -87,9 +117,9 @@ export default function DashboardPage() {
             </h2>
 
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-300 md:text-lg">
-              Supervisa alumnos, cursos, ingresos y actividad académica desde
-              una interfaz premium diseñada para transmitir innovación, control
-              y potencia visual.
+              Supervisa alumnos, cursos, representantes e ingresos desde una
+              interfaz premium diseñada para transmitir innovación, control y
+              potencia visual.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -105,6 +135,32 @@ export default function DashboardPage() {
                 <CalendarDays size={16} />
                 Actualizado hace 5 min
               </span>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/alumnos"
+                className="inline-flex items-center gap-2 rounded-2xl bg-cyan-500 px-5 py-3 font-bold text-white transition-all duration-300 hover:scale-[1.03]"
+              >
+                Ir a alumnos
+                <ArrowUpRight size={18} />
+              </Link>
+
+              <Link
+                href="/representantes"
+                className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition-all duration-300 hover:scale-[1.03] hover:bg-white/10"
+              >
+                Ir a representantes
+                <ArrowUpRight size={18} />
+              </Link>
+
+              <Link
+                href="/cursos"
+                className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 font-bold text-white transition-all duration-300 hover:scale-[1.03] hover:bg-white/10"
+              >
+                Ir a cursos
+                <ArrowUpRight size={18} />
+              </Link>
             </div>
           </div>
 
@@ -146,8 +202,9 @@ export default function DashboardPage() {
           const Icon = stat.icon
 
           return (
-            <div
+            <Link
               key={stat.label}
+              href={stat.href}
               className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/10 hover:shadow-[0_0_30px_rgba(34,211,238,0.08)]"
               style={{ animation: `fadeUp 0.7s ease ${index * 0.12}s both` }}
             >
@@ -173,8 +230,13 @@ export default function DashboardPage() {
                   </h3>
                   <span className="text-sm text-slate-400">{stat.detail}</span>
                 </div>
+
+                <div className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-white/80 transition group-hover:text-cyan-300">
+                  Abrir módulo
+                  <ArrowUpRight size={16} />
+                </div>
               </div>
-            </div>
+            </Link>
           )
         })}
       </section>
@@ -228,20 +290,46 @@ export default function DashboardPage() {
                 Acción rápida
               </p>
               <h3 className="mt-3 text-3xl font-black tracking-tight text-white">
-                Crear nuevo curso
+                Abrir módulos
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-slate-200/90">
-                Lanza una nueva oferta académica con una experiencia mucho más
-                visual, dinámica y elegante para tu equipo.
+                Acceda rápidamente a los módulos más importantes del sistema CIE.
               </p>
 
-              <Link
-                href="/cursos"
-                className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-white px-5 py-3 font-bold text-slate-900 transition-all duration-300 hover:scale-[1.03]"
-              >
-                Ir a cursos
-                <ArrowUpRight size={18} />
-              </Link>
+              <div className="mt-6 grid gap-3">
+                <Link
+                  href="/alumnos"
+                  className="inline-flex items-center justify-between rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold text-white transition-all duration-300 hover:bg-white/15"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <Users size={18} />
+                    Alumnos
+                  </span>
+                  <ArrowUpRight size={18} />
+                </Link>
+
+                <Link
+                  href="/representantes"
+                  className="inline-flex items-center justify-between rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold text-white transition-all duration-300 hover:bg-white/15"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <UserSquare2 size={18} />
+                    Representantes
+                  </span>
+                  <ArrowUpRight size={18} />
+                </Link>
+
+                <Link
+                  href="/cursos"
+                  className="inline-flex items-center justify-between rounded-2xl border border-white/10 bg-white/10 px-4 py-3 font-bold text-white transition-all duration-300 hover:bg-white/15"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <BookOpen size={18} />
+                    Cursos
+                  </span>
+                  <ArrowUpRight size={18} />
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -269,6 +357,53 @@ export default function DashboardPage() {
           </div>
         </div>
       </section>
+
+      <section className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        {quickLinks.map((item, i) => {
+          const Icon = item.icon
+          return (
+            <Link
+              key={item.title}
+              href={item.href}
+              className="group rounded-[28px] border border-white/10 bg-white/5 p-6 backdrop-blur-2xl transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/20 hover:bg-white/10"
+              style={{ animation: `fadeUp 0.8s ease ${i * 0.12}s both` }}
+            >
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-black/20">
+                <Icon className={item.color} size={24} />
+              </div>
+              <h4 className="text-xl font-black text-white">{item.title}</h4>
+              <p className="mt-2 text-sm leading-relaxed text-slate-400">{item.text}</p>
+              <div className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-cyan-300">
+                Entrar
+                <ArrowUpRight size={16} />
+              </div>
+            </Link>
+          )
+        })}
+      </section>
+
+      <style jsx global>{`
+        @keyframes fadeUp {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes growBar {
+          0% {
+            height: 0;
+            opacity: 0.4;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   )
 }
