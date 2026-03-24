@@ -80,7 +80,7 @@ export default function LoginPage() {
                                 <div className="relative flex items-end justify-center">
                                     <div className="absolute h-[320px] w-[320px] rounded-full bg-cyan-500/10 blur-[90px]" />
                                     <img
-                                        src="/mascota-cie.png"
+                                        src="/mascota.png"
                                         alt="Mascota CIE"
                                         className="relative max-h-[390px] w-auto object-contain drop-shadow-[0_30px_80px_rgba(0,0,0,0.55)] animate-[float_5s_ease-in-out_infinite]"
                                     />
@@ -99,7 +99,7 @@ export default function LoginPage() {
                                 <div className="mb-8 text-center">
                                     <div className="mx-auto inline-flex rounded-3xl border border-white/10 bg-white/5 px-5 py-4 shadow-[0_12px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl">
                                         <img
-                                            src="/logo-cie.png"
+                                            src="/logocie.png"
                                             alt="Logo CIE"
                                             className="h-auto w-[120px] object-contain"
                                         />
