@@ -2,6 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { getSupabaseClient } from "@/lib/supabase";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 
 type Alumno = {
     id: string
@@ -524,6 +527,39 @@ export default function AlumnosPage() {
         return <p className="mt-1 text-xs text-red-300">{text}</p>
     }
 
+    function exportToExcel() {
+        if (!items || items.length === 0) {
+            alert("No hay alumnos para exportar");
+            return;
+        }
+
+        const data = items.map((alumno: any) => ({
+            "Nombres": alumno.nombres || "",
+            "Apellidos": alumno.apellidos || "",
+            "Cédula": alumno.cedula || "",
+            "Teléfono": alumno.telefono || "",
+            "Dirección": alumno.direccion || "",
+            "Correo electrónico": alumno.correo || "",
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(data);
+
+        // 👇 SOLUCIÓN TOTAL ERROR TYPESCRIPT
+        (worksheet as any)["!cols"] = [
+            { wch: 20 },
+            { wch: 20 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 30 },
+            { wch: 30 },
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Alumnos");
+
+        XLSX.writeFile(workbook, "alumnos.xlsx");
+    }
+
     return (
         <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.16),transparent_20%),radial-gradient(circle_at_top_right,rgba(139,92,246,0.16),transparent_24%),linear-gradient(180deg,#020617_0%,#020816_46%,#030b1f_100%)] text-white">
             <div className="space-y-8 p-5 md:p-8">
@@ -540,12 +576,25 @@ export default function AlumnosPage() {
                         </p>
                     </div>
 
-                    <button
-                        onClick={openCreatePanel}
-                        className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 px-6 py-3 font-bold text-white shadow-[0_0_30px_rgba(59,130,246,0.35)] transition hover:scale-[1.02]"
-                    >
-                        + Nuevo alumno
-                    </button>
+                    <div className="flex gap-3">
+
+                        <button
+                            onClick={exportToExcel}
+                            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 px-5 py-3 font-bold text-white shadow-[0_0_30px_rgba(59,130,246,0.35)] transition hover:scale-[1.02]"
+                        >
+                            Exportar
+                        </button>
+
+                        <button
+                            onClick={openCreatePanel}
+                            className="rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 px-6 py-3 font-bold text-white shadow-[0_0_30px_rgba(59,130,246,0.35)] transition hover:scale-[1.02]"
+                        >
+                            + Nuevo alumno
+                        </button>
+
+                    </div>
+
+
                 </div>
 
                 {message && (
@@ -567,6 +616,7 @@ export default function AlumnosPage() {
                                 Consulta rápida y acciones sin salir de la pantalla.
                             </p>
                         </div>
+
 
                         <div className="flex flex-col gap-3 md:flex-row">
                             <input
